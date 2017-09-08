@@ -8,8 +8,9 @@ class App extends React.Component {
     return (
       <box top="center"
            left="center"
-           width="50%"
-           height="50%"
+           width="90%"
+           height="90%"
+           label="Some Label"
            border={{type: 'line'}}
            style={{border: {fg: 'blue'}}}>
         <list items={['abc', 'def', 'sss']} interactive={true} keys={true} mouse={true} style={{item: {fg: 'blue'}, selected: {fg: 'red'}}}></list>
