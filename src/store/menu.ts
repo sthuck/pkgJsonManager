@@ -1,4 +1,4 @@
-import {Reducer, Action} from 'redux';
+import {Action} from 'redux';
 
 interface MenuActionSet extends Action {
   type: 'MenuSet';
@@ -14,4 +14,4 @@ export const menu = (state = {current: 'default'}, action: MenuActions) => {
     default:
       return state;
   }
-}
+};

@@ -1,21 +1,34 @@
+import * as blessed from 'blessed';
 import * as React from 'react';
 
 interface MenuProps {
   items: string[];
   onItemSelect: (item: string) => any;
   style: object;
+  autoFocus?: boolean;
 }
 
-export function Menu(props: MenuProps) {
-  return (
-    <box top="center"
-      left="center"
-      width="90%"
-      height="90%"
-      label="Some Label"
-      border={{type: 'line'}}
-      style={{border: {fg: 'blue'}}}>
-      <list items={['abc', 'def', 'sss']} interactive={true} keys={true} mouse={true} style={{item: {fg: 'blue'}, selected: {fg: 'red'}}}></list>
-    </box>
-  );
+export class Menu extends React.Component<MenuProps, {}> {
+  private list: blessed.Widgets.ListElement;
+  public componentDidMount() {
+    this.props.autoFocus && this.list.focus();
+  }
+
+  public render() {
+    return (
+      <list
+        items={this.props.items}
+        interactive={true}
+        ref={(list: blessed.Widgets.ListElement) => this.list = list}
+        keys={true}
+        mouse={true}
+        style={this.props.style}
+        onSelect={this.onItemSelect}
+      />
+    );
+  }
+
+  private onItemSelect = (item: any) => {
+    this.props.onItemSelect(item.content);
+  }
 }

@@ -1,4 +1,4 @@
-import {Reducer, Action} from 'redux';
+import {Action, Reducer} from 'redux';
 
 interface AllFoldersSet extends Action {
   type: 'FoldersSet';
@@ -19,4 +19,4 @@ export const allFolders: Reducer<AllFoldersState> =
       default:
         return state;
     }
-  }
+  };

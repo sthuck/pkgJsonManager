@@ -1,19 +1,34 @@
-import * as React from 'react';
 import blessed = require('blessed');
+import * as React from 'react';
 import {render} from 'react-blessed';
 
+import {FolderPicker} from './componenets/folder-picker';
+import {Menu} from './componenets/menu';
+
+// const onItemSelect: any = (p1: any, p2: any) => {
+//   console.log('=====', p1);
+// };
+
 // Rendering a simple centered box
-class App extends React.Component {
-  render() {
+class App extends React.Component<{}, {}> {
+  public render() {
     return (
-      <box top="center"
-           left="center"
-           width="90%"
-           height="90%"
-           label="Some Label"
-           border={{type: 'line'}}
-           style={{border: {fg: 'blue'}}}>
-        <list items={['abc', 'def', 'sss']} interactive={true} keys={true} mouse={true} style={{item: {fg: 'blue'}, selected: {fg: 'red'}}}></list>
+      <box
+        top="center"
+        left="center"
+        width="100%"
+        height="100%"
+        label="Some Label"
+        border={{type: 'line'}}
+        style={{border: {fg: 'green'}}}
+      >
+        <FolderPicker
+          items={['abc', 'def', 'sss']}
+          style={{
+            border: {fg: 'blue'}
+          }}
+          autoFocus={true}
+        />
       </box>
     );
   }
@@ -27,8 +42,8 @@ const screen = blessed.screen({
 });
 
 // Adding a way to quit the program
-screen.key(['escape', 'q', 'C-c'], function(ch: any, key: any) {
-  return process.exit(0); 
+screen.key(['escape', 'q', 'C-c'], (ch: any, key: any) => {
+  return process.exit(0);
 });
 
 // Rendering the React app using our screen
