@@ -5,5 +5,6 @@ declare namespace JSX {
       form: any;
       checkbox: any;
       layout: any;
+      scrollablebox: any;
   }
 }

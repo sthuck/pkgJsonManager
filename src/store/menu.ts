@@ -6,6 +6,9 @@ interface MenuActionSet extends Action {
 }
 
 type MenuActions = MenuActionSet;
+export interface MenuState {
+  current: 'string';
+}
 
 export const menu = (state = {current: 'default'}, action: MenuActions) => {
   switch (action.type) {

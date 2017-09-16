@@ -22,7 +22,7 @@ export class Menu extends React.Component<MenuProps, {}> {
         ref={(list: blessed.Widgets.ListElement) => this.list = list}
         keys={true}
         mouse={true}
-        style={this.props.style}
+        style={{bold: true, ...this.props.style}}
         onSelect={this.onItemSelect}
       />
     );

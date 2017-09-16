@@ -1,5 +1,10 @@
 import {combineReducers, createStore} from 'redux';
-import {allFolders} from './allFolders';
-import {menu} from './menu';
+import {allFolders, AllFoldersState} from './allFolders';
+import {menu, MenuState} from './menu';
 
-export const store = createStore(combineReducers({menu, allFolders}));
+export interface IState {
+  allFolders: AllFoldersState;
+  menu: MenuState;
+}
+
+export const store = createStore(combineReducers<IState>({menu, allFolders}));

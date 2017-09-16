@@ -3,6 +3,7 @@
     "tslint-wix-react"
   ],
   "rules": {
-    "no-empty-interface": false
+    "no-empty-interface": false,
+    "ordered-imports": false
   }
 }
