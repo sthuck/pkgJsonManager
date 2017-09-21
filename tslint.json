@@ -4,6 +4,8 @@
   ],
   "rules": {
     "no-empty-interface": false,
-    "ordered-imports": false
+    "ordered-imports": false,
+    "no-submodule-imports": false,
+    "callable-types": false
   }
 }

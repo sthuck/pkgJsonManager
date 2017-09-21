@@ -49,12 +49,12 @@ class App extends React.Component<{}, {}> {
           border={{type: 'line'}}
           style={{border: {fg: 'white'}}}
         >
-          <Menu
+          {/* <Menu
             items={['foo', 'bla', 'bar']}
             style={{selected: {fg: 'blue'}, item: {fg: 'red'}}}
             onItemSelect={noop}
-          />
-
+          /> */}
+          <filemanager top="0" left="0" border={{type: 'line', bg: 12}} width="50%" height="50%" cwd="/"/>
         </box>
       </box>
     );

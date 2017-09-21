@@ -6,5 +6,6 @@ declare namespace JSX {
       checkbox: any;
       layout: any;
       scrollablebox: any;
+      filemanager: any;
   }
 }

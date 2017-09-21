@@ -2,17 +2,23 @@ import {CheckboxListItems} from '../componenets/checkbox-list';
 import {Action, Reducer} from 'redux';
 import {findIndex} from 'lodash';
 /* Types */
+export enum FoldersActionKeys {
+  SetFolders = 'SetFolders',
+  CheckFolder = 'CheckFolder',
+  UncheckFolder = 'UncheckFolder'
+}
+
 interface SetAllFolders extends Action {
-  type: 'SetFolders';
+  type: FoldersActionKeys.SetFolders;
   folders: CheckboxListItems;
 }
 
 interface CheckFolder extends Action {
-  type: 'CheckFolder';
+  type: FoldersActionKeys.CheckFolder;
   id: string | number;
 }
 interface UncheckFolder extends Action {
-  type: 'UncheckFolder';
+  type: FoldersActionKeys.UncheckFolder;
   id: string | number;
 }
 
@@ -24,12 +30,12 @@ export interface AllFoldersState {
 
 /* Actions */
 export const actionCheckFolder = (id: string | number): CheckFolder => ({
-  type: 'CheckFolder',
+  type: FoldersActionKeys.CheckFolder,
   id
 });
 
 export const actionUncheckFolder = (id: string | number): UncheckFolder => ({
-  type: 'UncheckFolder',
+  type: FoldersActionKeys.UncheckFolder,
   id
 });
 
@@ -38,14 +44,14 @@ export const actionUncheckFolder = (id: string | number): UncheckFolder => ({
 export const allFolders: Reducer<AllFoldersState> =
   (state = {folders: []}, action: AllFoldersActions) => {
     switch (action.type) {
-      case 'SetFolders':
+      case FoldersActionKeys.SetFolders:
         return {...state, folders: action.folders};
-      case 'CheckFolder':
-      case 'UncheckFolder':
+      case FoldersActionKeys.CheckFolder:
+      case FoldersActionKeys.UncheckFolder:
         const index = findIndex(state.folders, {id: action.id});
         const begin = state.folders.slice(0, index);
         const item = state.folders[index];
-        item.checked = action.type === 'CheckFolder' ? true : false;
+        item.checked = action.type === FoldersActionKeys.CheckFolder ? true : false;
         const end = state.folders.slice(index + 1);
         return {folders: [...begin, item, ...end]};
       default:
