@@ -3,7 +3,7 @@ import {Criteria, FsWalkOptions, NullableStrArr, possibleEntryTypes, Predicate, 
 import * as events from 'events';
 import * as fs from 'mz/fs';
 import * as path from 'path';
-import {zipObject, defaults, isRegExp} from 'lodash';
+import {zipObject, defaults, isRegExp, isFinite, isUndefined} from 'lodash';
 
 export class FsWalker extends events.EventEmitter {
   public static entryTypes = possibleEntryTypes;
@@ -24,33 +24,28 @@ export class FsWalker extends events.EventEmitter {
 
   public async walk() {
     if (await fs.exists(this.path)) {
-      return this.walkHelper(path.resolve(this.path), 1);
+      const stat = await fs.stat(this.path);
+      const dirEntryList = await this.getDirEntryList(this.path, stat, 0);
+      await this.walkHelper(this.path, dirEntryList, 1);
+      return true;
     }
+    return false;
   }
 
   public on(event: possibleEntryTypes, listener: (name: string, parent: string) => void) {
     return super.on(event, listener);
   }
 
-  private async walkHelper(dir: string, depth: number): Promise<string[]> {
-    if (this.options.maxdepth && (depth > this.options.maxdepth)) {
-      return [];
-    }
-
+  private async walkHelper(dir: string, dirEntryList: string[], depth: number): Promise<void> {
     if (this.ignoreList.some(ignorePattern => ignorePattern.test(dir))) {
-      return [];
+      return;
     }
-
-    const dirEntryList = await fs.readdir(dir);
 
     for (let dirEntry of dirEntryList) {
       dirEntry = path.resolve(dir, dirEntry);
       const stat = await fs.stat(dirEntry);
-      let childDirEntryList: NullableStrArr = null;
-
-      if (stat.isDirectory()) {
-        childDirEntryList = await this.walkHelper(dirEntry, depth + 1);
-      }
+      const childDirEntryList: NullableStrArr =
+        await this.getDirEntryList(dirEntry, stat, depth);
 
       const shouldEmit =
         this.checkCriteria({dirEntry, stat, childDirEntryList});
@@ -58,16 +53,23 @@ export class FsWalker extends events.EventEmitter {
       if (shouldEmit) {
         this.emitCorrectEvent(dirEntry, stat);
       }
+
+      if (stat.isDirectory()) {
+        await this.walkHelper(dirEntry, childDirEntryList, depth + 1);
+      }
     }
-    return dirEntryList;
+  }
+
+  private getDirEntryList(dirEntry: string, stat: fs.Stats, depth: number) {
+    if (this.options.maxdepth && (depth >= this.options.maxdepth)) {
+      return [];
+    }
+    return stat.isDirectory() ? fs.readdir(dirEntry) : [];
   }
 
   private emitCorrectEvent(dirEntry: string, stat: fs.Stats) {
-    if (stat.isDirectory()) {
-      this.emit(possibleEntryTypes.DIR, dirEntry);
-    } else {
+    return stat.isDirectory() ? this.emit(possibleEntryTypes.DIR, dirEntry) :
       this.emit(possibleEntryTypes.FILE, dirEntry);
-    }
   }
 
   private checkCriteria(params: PredicateParams): boolean {

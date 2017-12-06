@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node_modules/.bin/tsc -p . && node dist/index.js",
+    "build": "node_modules/.bin/tsc -p .",
+    "test": "mocha  --require ts-node/register 'src/**/*.spec.ts'",
+    "watch": "mocha --require ts-node/register --watch-extensions ts 'src/**/*.spec.ts' --watch",
     "lint": "node_modules/.bin/tslint -p ."
   },
   "author": "",
@@ -14,10 +16,15 @@
     "@types/blessed": "^0.1.6",
     "@types/chai": "^4.0.4",
     "@types/mocha": "^2.2.43",
+    "@types/mock-fs": "^3.6.30",
     "@types/react": "^0.14.57",
     "@types/redux": "^3.6.0",
+    "@types/sinon": "^2.3.5",
     "chai": "^4.1.2",
     "mocha": "^3.5.3",
+    "mock-fs": "^4.4.1",
+    "sinon": "^3.3.0",
+    "ts-node": "^3.3.0",
     "tslint": "^5.7.0",
     "tslint-wix-react": "^4.1.0",
     "typescript": "^2.5.2"

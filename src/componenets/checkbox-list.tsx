@@ -1,6 +1,7 @@
 import {debug} from '../utils/debug';
 import * as blessed from 'blessed';
 import * as React from 'react';
+import {findIndex} from 'lodash';
 
 export type CheckboxListItems = Array<{
   id: string | number,
@@ -18,14 +19,34 @@ interface CheckboxListProps {
 
 export class CheckboxList extends React.Component<CheckboxListProps, {}> {
   private form: blessed.Widgets.FormElement<any>;
+
   public componentDidMount() {
-    this.props.autoFocus && this.form.focus();
     this.form.on('click', () => this.form.focus());
+
     this.form.on('element check', (element: blessed.Widgets.CheckboxElement) => {
       this.props.onCheck(element.name);
     });
+
     this.form.on('element uncheck', (element: blessed.Widgets.CheckboxElement) => {
       this.props.onUncheck(element.name);
+    });
+
+    this.form.on('element keypress', (elem: any, ch: any, key: {full: string}) => {
+      const totalItems = this.props.items.length;
+      const itemIndex = findIndex(this.props.items, {id: elem.name});
+      switch (key.full) {
+        case 'up':
+          this.form.focusPrevious();
+          break;
+        case 'down':
+          this.form.focusNext();
+          break;
+        case 'tab':
+          debug.log('calling screen.focusOffset');
+          this.form.screen.focusOffset(totalItems - (itemIndex + 1));
+          break;
+        default:
+      }
     });
   }
 
@@ -33,28 +54,30 @@ export class CheckboxList extends React.Component<CheckboxListProps, {}> {
     const items = this.props.items;
     return (
       <form
-        keys={true}
+        keys={false}
         mouse={true}
-        border={{type: 'bg', bg: 2}}
         ref={(form: blessed.Widgets.FormElement<any>) => this.form = form}
         style={this.props.style}
       >
-        <layout
-          height="100%-4"
-          width="100%-4"
-        >
-          {items.map((item, index) =>
-            <checkbox
-              width="80%"
-              shrink={true}
-              mouse={true}
-              key={item.id}
-              name={item.id}
-              text={item.name}
-              checked={item.checked}
-            />)}
+        {/* <layout
+          height="100%"
+          width="100%"
+          style={{focus: {bg: 'red'}}}
+        > */}
+        {items.map((item, index) =>
+          <checkbox
+            width="100%"
+            top={index}
+            shrink={true}
+            mouse={true}
+            key={item.id}
+            name={item.id}
+            text={item.name}
+            checked={item.checked}
+            style={{focus: {bg: 'red'}}}
+          />)}
 
-        </layout>
+        {/* </layout> */}
       </form>
     );
   }

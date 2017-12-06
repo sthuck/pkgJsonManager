@@ -1,5 +1,6 @@
+import {collectDirs} from './utils/collect-dirs';
 import {FolderList} from './componenets/folder-list';
-import {cleanDebug} from './utils/debug';
+import {cleanDebug, debug} from './utils/debug';
 import blessed = require('blessed');
 import * as React from 'react';
 import {render} from 'react-blessed';
@@ -27,8 +28,8 @@ class App extends React.Component<{}, {}> {
         style={{border: {fg: 'green'}}}
       >
         <box
-          top="0"
-          left="0"
+          top="4"
+          left="4"
           width="50%"
           height="100%"
           border={{type: 'line'}}
@@ -36,26 +37,23 @@ class App extends React.Component<{}, {}> {
         >
           <FolderList
             style={{
+              focus: {
+                bg: 'red'
+              }
             }}
             onChange={noop}
             autoFocus={true}
           />
         </box>
-        <box
+        <Menu
+          items={['foo', 'bla', 'bar']}
+          style={{selected: {fg: 'blue'}, item: {fg: 'red'}, focus: {border: {fg: 'red'}}}}
+          onItemSelect={noop}
           top="0"
-          left="50%-1"
-          width="50%+1"
+          left="50%"
+          width="50%"
           height="100%"
-          border={{type: 'line'}}
-          style={{border: {fg: 'white'}}}
-        >
-          {/* <Menu
-            items={['foo', 'bla', 'bar']}
-            style={{selected: {fg: 'blue'}, item: {fg: 'red'}}}
-            onItemSelect={noop}
-          /> */}
-          <filemanager top="0" left="0" border={{type: 'line', bg: 12}} width="50%" height="50%" cwd="/"/>
-        </box>
+        />
       </box>
     );
   }
@@ -72,28 +70,25 @@ const screen = blessed.screen({
 });
 
 // Adding a way to quit the program
-screen.key(['escape', 'q', 'C-c'], (ch: any, key: any) => {
+screen.key(['q', 'C-c'], (ch: any, key: any) => {
   cleanDebug();
   return process.exit(0);
 });
-store.dispatch({
-  type: 'SetFolders', folders: [
-    {
-      id: 1,
-      name: 'foo',
-      checked: false
-    },
-    {
-      id: 2,
-      name: 'bad',
-      checked: false
-    },
-    {
-      id: 3,
-      name: 'foo3',
-      checked: true
-    }
-  ]
+
+screen.key('tab', () => {
+  debug.log('calling screen.focusNext');
+  screen.focusNext();
 });
+
+setInterval(() => {
+  debug.log('focus on', screen.focused.type);
+}, 1000);
+
+collectDirs('/Users/aviadh/git/bi/').then(dirs => {
+  store.dispatch({
+    type: 'SetFolders', folders: dirs
+  });
+});
+
 // Rendering the React app using our screen
 const component = render(<Provider store={store}><App /></Provider>, screen);

@@ -6,6 +6,10 @@ interface MenuProps {
   onItemSelect: (item: string) => any;
   style: object;
   autoFocus?: boolean;
+  top: number | string;
+  left: number | string;
+  height: number | string;
+  width: number | string;
 }
 
 export class Menu extends React.Component<MenuProps, {}> {
@@ -22,8 +26,13 @@ export class Menu extends React.Component<MenuProps, {}> {
         ref={(list: blessed.Widgets.ListElement) => this.list = list}
         keys={true}
         mouse={true}
+        border={{type: 'line'}}
         style={{bold: true, ...this.props.style}}
         onSelect={this.onItemSelect}
+        top={this.props.top}
+        left={this.props.left}
+        height={this.props.height}
+        width={this.props.width}
       />
     );
   }
