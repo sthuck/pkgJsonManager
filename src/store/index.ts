@@ -7,4 +7,4 @@ export interface IState {
   menu: MenuState;
 }
 
-export const store = createStore(combineReducers<IState>({menu, allFolders}));
+export const store = createStore(combineReducers<IState>({menu: menu as any, allFolders}));

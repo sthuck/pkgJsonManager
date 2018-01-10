@@ -13,8 +13,8 @@ interface CheckboxListProps {
   items: CheckboxListItems;
   autoFocus?: boolean;
   style: object;
-  onCheck: (id: string | number) => void;
-  onUncheck: (id: string | number) => void;
+  onCheck: (id: string | number) => any;
+  onUncheck: (id: string | number) => any;
 }
 
 export class CheckboxList extends React.Component<CheckboxListProps, {}> {

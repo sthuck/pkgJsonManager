@@ -7,6 +7,7 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "target": "es6",
+    "strictFunctionTypes": false,
     "lib": [
       "es6"
     ]

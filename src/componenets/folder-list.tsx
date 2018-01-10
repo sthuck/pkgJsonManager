@@ -4,8 +4,8 @@ import {CheckboxList} from './checkbox-list';
 import {connect} from 'react-redux';
 
 const mapStateToProps = (state: IState) => ({
-  items: state.allFolders.folders as Array<{id: string | number, name: string}>
+  items: state.allFolders.folders
 });
-export const FolderList: any =
+export const FolderList =
   connect(mapStateToProps,
     {onCheck: actionCheckFolder, onUncheck: actionUncheckFolder})(CheckboxList);

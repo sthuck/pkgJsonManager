@@ -24,7 +24,6 @@ class App extends React.Component<{}, {}> {
         width="100%"
         height="100%"
         label="Some Label"
-        padding="0"
         style={{border: {fg: 'green'}}}
       >
         <box
@@ -41,7 +40,6 @@ class App extends React.Component<{}, {}> {
                 bg: 'red'
               }
             }}
-            onChange={noop}
             autoFocus={true}
           />
         </box>
@@ -63,7 +61,7 @@ const p = new (blessed as any).program();
 // Creating our screen
 const screen = blessed.screen({
   program: p,
-  autoPadding: true,
+  autoPadding: false,
   smartCSR: true,
   dockBorders: true,
   title: 'react-blessed hello world'

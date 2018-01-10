@@ -1,5 +1,5 @@
 import {CheckboxListItems} from '../componenets/checkbox-list';
-import {Action, Reducer} from 'redux';
+import {Action, AnyAction, Reducer} from 'redux';
 import {findIndex} from 'lodash';
 /* Types */
 export enum FoldersActionKeys {
@@ -8,16 +8,16 @@ export enum FoldersActionKeys {
   UncheckFolder = 'UncheckFolder'
 }
 
-interface SetAllFolders extends Action {
+interface SetAllFolders {
   type: FoldersActionKeys.SetFolders;
   folders: CheckboxListItems;
 }
 
-interface CheckFolder extends Action {
+interface CheckFolder {
   type: FoldersActionKeys.CheckFolder;
   id: string | number;
 }
-interface UncheckFolder extends Action {
+interface UncheckFolder {
   type: FoldersActionKeys.UncheckFolder;
   id: string | number;
 }
